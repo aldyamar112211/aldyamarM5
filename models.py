@@ -2,20 +2,16 @@ import sqlite3
 import os
 from dotenv import load_dotenv
 
-# Memuat variabel lingkungan dari file .env
 load_dotenv()
 
-# Mendapatkan URL database dari variabel lingkungan atau menggunakan default
 DATABASE_URL = os.getenv("DATABASE_URL", "database.db")
 
 def get_db_connection():
-    """Membuat dan mengembalikan koneksi ke database SQLite."""
     conn = sqlite3.connect(DATABASE_URL)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    """Menginisialisasi database dengan skema yang telah ditentukan."""
     conn = get_db_connection()
     with open("schema.sql") as f:
         conn.executescript(f.read())
@@ -24,7 +20,6 @@ def init_db():
     print("Database berhasil diinisialisasi.")
 
 def get_user_by_username(username):
-    """Mengambil data pengguna berdasarkan username."""
     conn = get_db_connection()
     user = conn.execute(
         "SELECT * FROM users WHERE username = ?", (username,)
@@ -33,7 +28,6 @@ def get_user_by_username(username):
     return user
 
 def get_all_mahasiswa():
-    """Mengambil semua data mahasiswa dan mengurutkannya berdasarkan nama."""
     conn = get_db_connection()
     mahasiswa_list = conn.execute(
         "SELECT * FROM mahasiswa ORDER BY nama"
